@@ -19,9 +19,10 @@ def main():
     congratulation
     """
     users = []
-    for item in NameBirthGenerator(FILE):
+    for item in NameBirthGenerator(FILE, 1980, 2000, 500):
         users.append(item)
-
+    # for user in users:
+    #     print(user)
     calc_dates()
     scan(users)
     congratulate()
@@ -32,7 +33,8 @@ def calc_dates():
     Calculate all dates for next weekend and week, puts them to the dict DAYS
     """
     now = date.today()
-    delta = timedelta(days=5 - now.weekday())
+    day_delta = 5 - now.weekday()
+    delta = timedelta(days=day_delta if day_delta >= 0 else 0)
     for _ in range(7):
         day = now + delta
         DAYS[day.weekday()] = day.strftime('%d %m')
@@ -58,8 +60,13 @@ def congratulate():
     Goes thought the list with colleagues which have birthday next week or next
     weekend and print them
     """
+    counter = 0
     for weekday, persons in B_DAY.items():
-        print(f'{WEEK_DAYS[weekday]}: {", ".join(persons)}')
+        if persons:
+            print(f'{WEEK_DAYS[weekday]}: {", ".join(persons)}')
+            counter += 1
+    if counter == 0:
+        print('No birthdays next week')
 
 
 if __name__ == '__main__':
